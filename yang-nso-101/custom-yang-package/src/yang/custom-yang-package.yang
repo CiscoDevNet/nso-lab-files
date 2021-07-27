@@ -1,0 +1,76 @@
+module custom-yang-package {
+  namespace "http://com/example/customyangpackage";
+  prefix custom-yang-package;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+
+
+  container example-container {
+    leaf input-field {
+      tailf:info "Your custom input field";
+      type string;
+    }
+  }
+
+
+  list person {
+    key email;
+
+    leaf first-name {
+      tailf:info "Person's first name";
+      mandatory true;
+      type string;
+    }
+
+    leaf last-name {
+      tailf:info "Person's last name";
+      mandatory true;
+      type string;
+    }
+
+    leaf date-of-birth {
+      tailf:info "Date of birth as dd/mm/yyyy";
+      type string {
+        pattern "[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]";
+      }
+    }
+
+    leaf email {
+      tailf:info "Contact email";
+      mandatory true;
+      type string;
+    }
+
+    leaf job-role {
+      tailf:info "Persons job role whitin organization";
+      type enumeration {
+        enum admin;
+        enum developer;
+        enum manager;
+      }
+    }
+  }
+
+
+  list application-vlan {
+    key vlan-id;
+    leaf vlan-id {
+      type uint16 {
+        range "100..400";
+      }
+    }
+
+    leaf assigned-to-app {
+      type string;
+    }
+  }
+
+}
