@@ -1,0 +1,31 @@
+module loopback {
+  namespace "http://com/example/loopback";
+  prefix loopback;
+
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  list loopback {
+    key name;
+
+    uses ncs:service-data;
+    ncs:servicepoint "loopback";
+
+    leaf name {
+      type string;
+    }
+
+    leaf device {
+      type string;
+    }
+
+    leaf loopback-intf { 
+      type uint32;
+    } 
+
+    leaf ip-address {
+      type string;
+    }
+  }
+}
