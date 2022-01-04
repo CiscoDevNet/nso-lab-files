@@ -1,4 +1,4 @@
-all: fxs pytest
+all: fxs 
 .PHONY: all
 
 # Include standard NCS examples build definitions and rules
