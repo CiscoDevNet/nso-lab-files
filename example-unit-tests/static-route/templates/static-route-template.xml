@@ -1,0 +1,40 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+
+    <!-- DEVICE -->
+
+    <device>
+      <name>{$DEVICE}</name>
+      <config>
+
+      <!-- IOS --> 
+        <ip xmlns="urn:ios">
+            <route>
+            <ip-route-forwarding-list>
+                <prefix>{$NETWORK-ADDRESS}</prefix>
+                <mask>{$NETMASK}</mask>
+                <forwarding-address>{$NEXT-HOP}</forwarding-address>
+            </ip-route-forwarding-list>
+            </route>
+        </ip>
+
+      <!-- IOS-XR -->
+        <router xmlns="http://tail-f.com/ned/cisco-ios-xr">
+            <static>
+            <address-family>
+                <ipv4>
+                <unicast>
+                    <routes-ip>
+                    <net>{$IP-PREFIX}</net>
+                    <address>{$NEXT-HOP}</address>
+                    </routes-ip>
+                </unicast>
+                </ipv4>
+            </address-family>
+            </static>
+        </router>
+      </config>
+    </device>
+  </devices>
+</config-template>
+

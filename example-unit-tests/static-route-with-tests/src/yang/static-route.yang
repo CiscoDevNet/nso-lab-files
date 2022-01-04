@@ -1,0 +1,51 @@
+module static-route {
+
+  namespace "http://example.com/static-route";
+  prefix static-route;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  augment /ncs:services {
+    list static-route {
+      description "Static route service.";
+
+      key device;
+
+      uses ncs:service-data;
+      ncs:servicepoint static-route-servicepoint;
+
+      leaf device {
+        type leafref {
+          path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+
+      list route {
+        description "Device routes.";
+
+        key ip-prefix;
+
+        leaf ip-prefix {
+          tailf:info "IP Prefix";
+          type inet:ip-prefix;
+          mandatory true;
+        }
+
+        leaf next-hop {
+          tailf:info "Next Hop";
+          type inet:ipv4-address;
+          mandatory true;
+        }
+
+      }
+    }
+  }
+}
