@@ -1,0 +1,100 @@
+module loopback {
+  namespace "http://com/example/loopback";
+  prefix loopback;
+
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  identity loopback {
+    base ncs:plan-component-type;
+  }
+
+  identity loopback-configured {
+    base ncs:plan-state;
+  }
+
+  ncs:plan-outline loopback-plan {
+    description "Loopback plan";
+
+    ncs:component-type "ncs:self" {
+      ncs:state "ncs:init";
+      ncs:state "ncs:ready";
+    }
+    ncs:component-type "loopback:loopback" {
+      ncs:state "ncs:init";
+      ncs:state "loopback:loopback-configured" {
+        ncs:create {
+          ncs:pre-condition {
+            ncs:monitor "/prefix-allocations[name=$SERVICE/name]/ip-prefix";
+          }
+          ncs:nano-callback;
+        }
+      }
+      ncs:state "ncs:ready";
+    }
+  }
+
+  ncs:service-behavior-tree loopback {
+    description "Loopback behavior tree";
+    ncs:plan-outline-ref "loopback:loopback-plan";
+    ncs:selector {
+      ncs:create-component "'self'" {
+        ncs:component-type-ref "ncs:self";
+      }
+      ncs:create-component "'loopback'" {
+        ncs:component-type-ref "loopback:loopback";
+      }
+    }
+  }
+
+  list prefix-allocations {
+    key "name";
+    unique "ip-prefix";
+
+    leaf name {
+      type leafref {
+        path /loopback/name;
+      }
+    }
+
+    leaf ip-prefix {
+      type inet:ipv4-prefix;
+      tailf:info "IP prefix used to configure an address loopback interface";
+    }
+  }
+
+  list loopback {
+    key name;
+
+    uses ncs:service-data;
+    uses ncs:nano-plan-data;
+    ncs:servicepoint "loopback";
+
+    leaf name {
+      tailf:info "Service instance name";
+      type string;
+    }
+
+    leaf device {
+      tailf:info "Device name";
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    leaf loopback-intf {
+      tailf:info "Loopback interface number";
+      type uint32;
+    }
+
+  }
+}

@@ -1,0 +1,34 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+      <device>
+         <name>{/device}</name>
+         <config>
+           <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+             <Loopback>
+               <id>{/loopback-intf}</id>
+               <ipv4>
+                 <address>
+                   <ip>{$IP_ADDRESS}</ip>
+                   <mask>255.255.255.255</mask>
+                 </address>
+               </ipv4>
+             </Loopback>
+           </interface>
+
+           <interface xmlns="urn:ios">
+             <Loopback>
+               <name>{/loopback-intf}</name>
+               <ip>
+                 <address>
+                   <primary>
+                     <address>{$IP_ADDRESS}</address>
+                     <mask>255.255.255.255</mask>
+                   </primary>
+                 </address>
+               </ip>
+             </Loopback>
+           </interface>
+         </config>
+       </device>
+  </devices>
+</config-template>
